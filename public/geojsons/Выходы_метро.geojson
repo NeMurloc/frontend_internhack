@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"name": "Выходы_метро",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
+"features": [
+{ "type": "Feature", "properties": { "Number": "7", "Text": "Потапово" }, "geometry": { "type": "Point", "coordinates": [ 4173365.25, 7470052.910000000149012 ] } },
+{ "type": "Feature", "properties": { "Number": "6", "Text": "Потапово" }, "geometry": { "type": "Point", "coordinates": [ 4173441.379999999888241, 7470047.67 ] } },
+{ "type": "Feature", "properties": { "Number": "5", "Text": "Потапово" }, "geometry": { "type": "Point", "coordinates": [ 4173487.049999999813735, 7469711.730000000447035 ] } },
+{ "type": "Feature", "properties": { "Number": "3", "Text": "Потапово" }, "geometry": { "type": "Point", "coordinates": [ 4173976.089999999850988, 7469745.929999999701977 ] } },
+{ "type": "Feature", "properties": { "Number": "4", "Text": "Потапово" }, "geometry": { "type": "Point", "coordinates": [ 4174093.740000000223517, 7469755.21999999973923 ] } },
+{ "type": "Feature", "properties": { "Number": "2", "Text": "Потапово" }, "geometry": { "type": "Point", "coordinates": [ 4174126.910000000149012, 7470057.879999999888241 ] } },
+{ "type": "Feature", "properties": { "Number": "1", "Text": "Потапово" }, "geometry": { "type": "Point", "coordinates": [ 4174012.42, 7470053.269999999552965 ] } }
+]
+}
