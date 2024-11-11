@@ -53,6 +53,38 @@ const PopupSettings: React.FC = observer(() => {
         };
     }, []);
 
+    const handleFilesUploadWhithoutBackend = async () => {
+        try {
+            setFolderName('Название загруженной папки')
+            const fileNames = ['ТестДороги.geojson', 'ТестЗдания.geojson', 'ТестДороги2.geojson', 'ТестЗдания2.geojson']; // Добавьте все имена файлов
+
+            // Это пути для localhost
+            // const promises = fileNames.map(async (fileName) => {
+            //     const response = await fetch(`/testBackendGeojson/${fileName}`);
+            //     const geoJsonData = await response.json();
+
+            //     geoJsonStore.addFile(fileName, geoJsonData); // Сохранение в MobX с указанием имени файла и данных
+            // });
+
+            const promises = fileNames.map(async (fileName) => {                
+                const response = await fetch(`${process.env.PUBLIC_URL}/testBackendGeojson/${fileName}`);
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки файла: ${fileName}`);
+                }
+
+                const geoJsonData = await response.json();
+                geoJsonStore.addFile(fileName, geoJsonData);
+            });
+
+            await Promise.all(promises);
+
+            console.log('Файлы успешно добавлены в MobX Store');
+        } catch (error) {
+            console.error('Ошибка при загрузке файлов:', error);
+        }
+    }
+
     const handleFilesUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
@@ -67,7 +99,7 @@ const PopupSettings: React.FC = observer(() => {
             const dbfFiles: File[] = [];
             const prjFiles: File[] = [];
             const cpgFiles: File[] = [];
-            
+
             Array.from(files).forEach((file) => {
                 const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
@@ -87,7 +119,7 @@ const PopupSettings: React.FC = observer(() => {
                     case 'cpg':
                         cpgFiles.push(file);
                         break;
-                    default:                        
+                    default:
                         break;
                 }
             });
@@ -99,56 +131,26 @@ const PopupSettings: React.FC = observer(() => {
             prjFiles.forEach((file, index) => formData.append(`prjFiles[${index}]`, file));
             cpgFiles.forEach((file, index) => formData.append(`cpgFiles[${index}]`, file));
 
-            // try {
-            //     const response = await axios.post('/your-backend-endpoint', formData);
-
-            //     if (response.status === 200) {
-            //         const geoJsonFiles = response.data;
-
-            //         // Преобразуем каждый файл из ответа в формат GeoJSON и добавляем в хранилище
-            //         geoJsonFiles.forEach((file: { name: string; content: GeoJSON.GeoJsonObject }) => {
-            //             geoJsonStore.addFile(file.name, file.content);
-            //         });
-            //         console.log('Файлы успешно загружены');
-            //     } else {
-            //         console.error('Ошибка при загрузке файлов:', response.statusText);
-            //     }
-            // } catch (error) {
-            //     console.error('Ошибка при загрузке файлов:', error);
-            // }
-
             try {
-                const fileNames = ['ТестДороги.geojson', 'ТестЗдания.geojson', 'ТестДороги2.geojson', 'ТестЗдания2.geojson']; // Добавьте все имена файлов
+                const response = await axios.post('/your-backend-endpoint', formData);
 
-                // Это пути для localhost
-                // const promises = fileNames.map(async (fileName) => {
-                //     const response = await fetch(`/testBackendGeojson/${fileName}`);
-                //     const geoJsonData = await response.json();
+                if (response.status === 200) {
+                    const geoJsonFiles = response.data;
 
-                //     geoJsonStore.addFile(fileName, geoJsonData); // Сохранение в MobX с указанием имени файла и данных
-                // });
-
-                const promises = fileNames.map(async (fileName) => {
-                    // Строим путь с использованием PUBLIC_URL, чтобы гарантировать правильный доступ к файлам в public
-                    const response = await fetch(`${process.env.PUBLIC_URL}/testBackendGeojson/${fileName}`);
-                    
-                    if (!response.ok) {
-                        throw new Error(`Ошибка загрузки файла: ${fileName}`);
-                    }
-                    
-                    const geoJsonData = await response.json(); // Загружаем данные geojson
-                    geoJsonStore.addFile(fileName, geoJsonData); // Сохраняем в MobX Store
-                });
-
-                await Promise.all(promises);
-
-                console.log('Файлы успешно добавлены в MobX Store');
+                    // Преобразуем каждый файл из ответа в формат GeoJSON и добавляем в хранилище
+                    geoJsonFiles.forEach((file: { name: string; content: GeoJSON.GeoJsonObject }) => {
+                        geoJsonStore.addFile(file.name, file.content);
+                    });
+                    console.log('Файлы успешно загружены');
+                } else {
+                    console.error('Ошибка при загрузке файлов:', response.statusText);
+                }
             } catch (error) {
                 console.error('Ошибка при загрузке файлов:', error);
             }
         }
     };
-    
+
     const handleStageSelect = (stage: string) => {
 
         geoJsonStore.setSelectedStage(stage);
@@ -159,7 +161,7 @@ const PopupSettings: React.FC = observer(() => {
         setFolderName('');
         setIsOpen(false);
     };
-    
+
     const sortedStages = stages
         .map((stage) => parseInt(stage, 10))
         .sort((a, b) => a - b)
@@ -180,19 +182,20 @@ const PopupSettings: React.FC = observer(() => {
                         <>
                             <div
                                 className={cl.uploadFiles}
-                                onClick={() => fileInputRef.current?.click()}
+                                // onClick={() => fileInputRef.current?.click()}
+                                onClick={handleFilesUploadWhithoutBackend}
                             >
                                 Загрузить файлы
                             </div>
 
-                            <input
+                            {/* <input
                                 type="file"
                                 ref={fileInputRef}
                                 style={{ display: 'none' }}
                                 webkitdirectory="true"
                                 multiple
                                 onChange={handleFilesUpload}
-                            />
+                            /> */}
                         </>
                     )}
                 </div>
