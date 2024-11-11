@@ -14,6 +14,7 @@
         "@types/react": "^18.3.12",
         "@types/react-dom": "^18.3.1",
         "@types/react-router-dom": "^5.3.3",
+        "antd": "^5.21.6",
         "axios": "^1.7.7",
         "leaflet": "^1.9.4",
         "mobx": "^6.13.5",
@@ -28,12 +29,12 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-      "start": "react-scripts start",
-      "predeploy": "npm run build",
-      "deploy": "gh-pages -d build",
-      "build": "react-scripts build",
-      "test": "react-scripts test",
-      "eject": "react-scripts eject"
+        "start": "react-scripts start",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
     },
     "eslintConfig": {
         "extends": [

@@ -12,22 +12,21 @@ interface NamedGeoJsonObject extends GeoJSON.GeoJsonObject {
 
 const PopupSettings: React.FC = observer(() => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [folderName, setFolderName] = useState<string>('');  // Состояние для хранения пути до папки
+    const [folderName, setFolderName] = useState<string>('');
     const popupRef = useRef<HTMLDivElement | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    // Массив уникальных этапов (например, "2026", "2027", и т.д.)
     const [stages, setStages] = useState<string[]>([]);
 
     useEffect(() => {
         const dispose = reaction(
-            () => geoJsonStore.files, // Отслеживаем файлы
+            () => geoJsonStore.files,
             (files) => {
                 const stageNames: Set<string> = new Set();
                 files.forEach((file) => {
-                    const geoJson = file.content as NamedGeoJsonObject; // Приведение типа
+                    const geoJson = file.content as NamedGeoJsonObject;
                     if (geoJson.name) {
-                        const stageName = geoJson.name.split('&')[0]; // Извлекаем этап из имени
+                        const stageName = geoJson.name.split('&')[0];
                         stageNames.add(stageName);
                     }
                 });
@@ -54,14 +53,13 @@ const PopupSettings: React.FC = observer(() => {
         };
     }, []);
 
-    // Обработчик загрузки и отправки файлов
     const handleFilesUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
         if (files) {
-            const folder = event.target.files?.[0]?.webkitRelativePath.split('/')[0]; // Получаем путь к папке
+            const folder = event.target.files?.[0]?.webkitRelativePath.split('/')[0];
             if (folder) {
-                setFolderName(folder); // Обновляем состояние с путем
+                setFolderName(folder);
             }
 
             const shpFiles: File[] = [];
@@ -69,8 +67,7 @@ const PopupSettings: React.FC = observer(() => {
             const dbfFiles: File[] = [];
             const prjFiles: File[] = [];
             const cpgFiles: File[] = [];
-
-            // Фильтруем файлы по расширениям и добавляем их в соответствующие массивы
+            
             Array.from(files).forEach((file) => {
                 const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
@@ -90,13 +87,11 @@ const PopupSettings: React.FC = observer(() => {
                     case 'cpg':
                         cpgFiles.push(file);
                         break;
-                    default:
-                        // Игнорируем файлы с другими расширениями
+                    default:                        
                         break;
                 }
             });
 
-            // Создаем FormData и добавляем массивы файлов
             const formData = new FormData();
             shpFiles.forEach((file, index) => formData.append(`shpFiles[${index}]`, file));
             shxFiles.forEach((file, index) => formData.append(`shxFiles[${index}]`, file));
@@ -125,11 +120,24 @@ const PopupSettings: React.FC = observer(() => {
             try {
                 const fileNames = ['ТестДороги.geojson', 'ТестЗдания.geojson', 'ТестДороги2.geojson', 'ТестЗдания2.geojson']; // Добавьте все имена файлов
 
-                const promises = fileNames.map(async (fileName) => {
-                    const response = await fetch(`/testBackendGeojson/${fileName}`);
-                    const geoJsonData = await response.json();
+                // Это пути для localhost
+                // const promises = fileNames.map(async (fileName) => {
+                //     const response = await fetch(`/testBackendGeojson/${fileName}`);
+                //     const geoJsonData = await response.json();
 
-                    geoJsonStore.addFile(fileName, geoJsonData); // Сохранение в MobX с указанием имени файла и данных
+                //     geoJsonStore.addFile(fileName, geoJsonData); // Сохранение в MobX с указанием имени файла и данных
+                // });
+
+                const promises = fileNames.map(async (fileName) => {
+                    // Строим путь с использованием PUBLIC_URL, чтобы гарантировать правильный доступ к файлам в public
+                    const response = await fetch(`${process.env.PUBLIC_URL}/testBackendGeojson/${fileName}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Ошибка загрузки файла: ${fileName}`);
+                    }
+                    
+                    const geoJsonData = await response.json(); // Загружаем данные geojson
+                    geoJsonStore.addFile(fileName, geoJsonData); // Сохраняем в MobX Store
                 });
 
                 await Promise.all(promises);
@@ -140,24 +148,22 @@ const PopupSettings: React.FC = observer(() => {
             }
         }
     };
-
-    // Обработчик выбора этапа
+    
     const handleStageSelect = (stage: string) => {
-        // geoJsonStore.setTrackVisibility(false);
-        geoJsonStore.setSelectedStage(stage);  // Обновляем выбранный этап в MobX
+
+        geoJsonStore.setSelectedStage(stage);
     };
 
     const handleResetProject = () => {
-        geoJsonStore.resetProject();  // Сбрасываем состояние в MobX
-        setFolderName(''); // Очищаем путь до папки
-        setIsOpen(false); // Закрываем попап
+        geoJsonStore.resetProject();
+        setFolderName('');
+        setIsOpen(false);
     };
-
-    // Фильтруем и сортируем этапы по номерам очереди
+    
     const sortedStages = stages
-        .map((stage) => parseInt(stage, 10)) // Преобразуем строковые номера этапов в числа
-        .sort((a, b) => a - b) // Сортируем по возрастанию
-        .map((stage) => stage.toString()); // Преобразуем обратно в строки
+        .map((stage) => parseInt(stage, 10))
+        .sort((a, b) => a - b)
+        .map((stage) => stage.toString());
 
     return (
         <>

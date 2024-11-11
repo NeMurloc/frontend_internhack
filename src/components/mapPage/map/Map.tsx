@@ -11,7 +11,6 @@ import busIcon from '../../../icons/bus.webp'
 import metroIcon from '../../../icons/metro.jpeg'
 
 
-// Define custom icons for bus stops and metro stations
 const busStopIcon = new L.Icon({
     className: cl.icon,
     iconUrl: busIcon,

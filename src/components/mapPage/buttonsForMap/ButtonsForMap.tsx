@@ -2,23 +2,21 @@ import { useState } from 'react';
 import cl from './ButtonsForMap.module.css';
 import geoJsonStore from '../../../store/geojsonStore';
 import { observer } from 'mobx-react-lite';
+import { notification } from 'antd';
 
 const ButtonsForMap: React.FC = observer(() => {
-    // const [trackIsVisible, setTrackIsVisible] = useState<boolean>(false);
 
     const handleClickGiveTracks = () => {
         if (geoJsonStore.selectedStage) {
-            // setTrackIsVisible(true);
-            geoJsonStore.setTrackVisibility(true);  // Устанавливаем состояние видимости дорожек в MobX
+            geoJsonStore.setTrackVisibility(true);
         } else {
-            alert("Выберете этап")
+            notification.warning({
+                message: 'Предупреждение',
+                description: 'Сначала выберите этап',
+                placement: 'top',
+                duration: 3
+              });
         }
-    };
-
-    const handleClear = () => {
-        geoJsonStore.setTrackVisibility(false);
-        // geoJsonStore.resetState();  // Сбрасываем состояния в MobX
-        // setTrackIsVisible(false);  // Скрываем дорожки в локальном состоянии
     };
 
     return (

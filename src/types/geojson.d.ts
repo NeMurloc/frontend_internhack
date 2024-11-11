@@ -8,7 +8,6 @@ declare module 'proj4' {
     export = proj4;
 }
 
-// custom.d.ts
 declare namespace JSX {
     interface IntrinsicElements {
         input: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
