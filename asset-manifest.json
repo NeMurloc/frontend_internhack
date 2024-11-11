@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/frontend_internhack/static/css/main.6c9663f8.css",
+    "main.js": "/frontend_internhack/static/js/main.8c9809bb.js",
+    "static/media/metro.jpeg": "/frontend_internhack/static/media/metro.03ce6b4dbc8660d58608.jpeg",
+    "static/media/bus.webp": "/frontend_internhack/static/media/bus.4084978ed6409b0416da.webp",
+    "index.html": "/frontend_internhack/index.html",
+    "main.6c9663f8.css.map": "/frontend_internhack/static/css/main.6c9663f8.css.map",
+    "main.8c9809bb.js.map": "/frontend_internhack/static/js/main.8c9809bb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6c9663f8.css",
+    "static/js/main.8c9809bb.js"
+  ]
+}

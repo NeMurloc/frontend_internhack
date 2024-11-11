@@ -1,0 +1,50 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [37.6173, 55.7558]
+            },
+            "properties": {
+                "name": "Moscow",
+                "type": "Point"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [37.6173, 55.7558],
+                    [37.6177, 55.756],
+                    [37.618, 55.7562]
+                ]
+            },
+            "properties": {
+                "name": "Sample Line",
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [37.618, 55.756],
+                        [37.619, 55.7565],
+                        [37.6185, 55.757],
+                        [37.6175, 55.7565],
+                        [37.618, 55.756]
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Sample Polygon",
+                "type": "Polygon"
+            }
+        }
+    ]
+}
